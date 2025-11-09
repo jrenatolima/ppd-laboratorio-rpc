@@ -1,0 +1,25 @@
+syntax = "proto3";
+package calc;
+
+enum Operation {
+  OP_UNSPECIFIED = 0;
+  ADD = 1;
+  SUB = 2;
+  MUL = 3;
+  DIV = 4;
+}
+
+message OpRequest {
+  Operation op = 1;
+  double a = 2;
+  double b = 3;
+}
+
+message Result {
+  double value = 1;
+  string error = 2; // empty if success
+}
+
+service Calculator {
+  rpc Compute(OpRequest) returns (Result);
+}
