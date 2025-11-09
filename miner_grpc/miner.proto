@@ -1,0 +1,46 @@
+syntax = "proto3";
+package miner;
+
+message Empty {}
+
+message TransactionID {
+  int32 id = 1;
+}
+
+message ChallengeResponse {
+  int32 transaction_id = 1;
+  int32 challenge = 2; // -1 if invalid
+}
+
+message StatusResponse {
+  int32 status = 1; // 1 = pendente, 0 = resolvido, -1 = inválido
+}
+
+message SubmitRequest {
+  int32 transaction_id = 1;
+  int32 client_id = 2;
+  string solution = 3;
+}
+
+message SubmitResponse {
+  int32 code = 1; // 1 válida, 0 inválida, 2 já resolvida, -1 transaction inválida
+}
+
+message WinnerResponse {
+  int32 winner = 1; // -1 inválida; 0 sem vencedor ainda
+}
+
+message SolutionResponse {
+  int32 status = 1;    // -1 inválida; 0 resolvida; 1 pendente
+  string solution = 2; // "" se pendente/ inválida
+  int32 challenge = 3; // -1 se inválida
+}
+
+service Miner {
+  rpc GetTransactionID(Empty) returns (TransactionID);
+  rpc GetChallenge(TransactionID) returns (ChallengeResponse);
+  rpc GetTransactionStatus(TransactionID) returns (StatusResponse);
+  rpc SubmitChallenge(SubmitRequest) returns (SubmitResponse);
+  rpc GetWinner(TransactionID) returns (WinnerResponse);
+  rpc GetSolution(TransactionID) returns (SolutionResponse);
+}
